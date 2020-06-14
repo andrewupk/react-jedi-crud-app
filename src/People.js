@@ -3,7 +3,7 @@ import Table from "./components/common/Table";
 import Form from './components/common/Form'
 
 // import './App.css';
-import 'bootstrap/dist/css/bootstrap.css';
+
 
 const data = [
     {first: 'Mark', last: 'Otto', handle: '@motto', id: '1'},
@@ -13,7 +13,7 @@ const data = [
 
 const columns = Object.keys(data[0]);
 
-function App() {
+function People() {
     const [people, setPeople] = useState(data);
     console.log(people);
 
@@ -29,12 +29,22 @@ function App() {
         }, {})
     }
 
+    const deleteRow = (item) => {
+        console.log('Deleting....', item);
+        const data = people.filter(person => person !== item);
+        setPeople(data);
+    }
+
     return (
         <div className="container">
+            <div className="page-header text-center">
+                <h1>People</h1>
+            </div>
             <Table
                 data={people}
                 columns={columns}
                 tableDescriptor="People"
+                deleteHandler={deleteRow}
             />
             <Form
                 initialData={getInitialPeopleData()}
@@ -45,4 +55,4 @@ function App() {
     );
 }
 
-export default App;
+export default People;
