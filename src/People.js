@@ -1,38 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Table from "./components/common/Table";
-import Form from './components/common/Form'
+import { getPeople } from './services/swApiService';
+import Button from './components/common/Button';
+import {Link} from 'react-router-dom';
 
 // import './App.css';
 
-
-const data = [
-    {first: 'Mark', last: 'Otto', handle: '@motto', id: '1'},
-    {first: 'Carl', last: 'Reno', handle: '@ceno', id: '2'},
-    {first: 'Steve', last: 'Smith', handle: '@ssteve', id: '3'}
-]
-
-const columns = Object.keys(data[0]);
+const columns = ['name', 'height', 'mass', 'gender', 'birth_year', 'id'];
 
 function People() {
-    const [people, setPeople] = useState(data);
-    console.log(people);
+    const [people, setPeople] = useState([]);
 
-    const handleAppPerson = (personData) => {
-        const data = [...people, personData];
-        setPeople(data)
-    }
-
-    const getInitialPeopleData = () => {
-        return columns.reduce((cols, columnName) => {
-            cols[columnName] = "";
-            return cols;
-        }, {})
-    }
+    useEffect(() => {
+        const getData = async () => {
+            if (localStorage.people === undefined){
+                const data = await getPeople()
+                localStorage.setItem('people', JSON.stringify(data))
+                setPeople(data)
+            } else {
+                setPeople(JSON.parse(localStorage.getItem('people')))
+            }
+        }
+        
+        getData()        
+    }, []);
 
     const deleteRow = (item) => {
         console.log('Deleting....', item);
-        const data = people.filter(person => person !== item);
-        setPeople(data);
+        const localpeople = JSON.parse(localStorage.people);
+        const data = localpeople.filter(person => person.id !== item.id)
+        localStorage.setItem('people', JSON.stringify(data))
+        setPeople(data)
     }
 
     return (
@@ -40,16 +38,18 @@ function People() {
             <div className="page-header text-center">
                 <h1>People</h1>
             </div>
+            <Link to="/people/new">
+                <Button
+                    label="New creature"
+                    classes="btn btn-info"
+                    disabled={false}
+                />
+            </Link>
             <Table
                 data={people}
                 columns={columns}
                 tableDescriptor="People"
                 deleteHandler={deleteRow}
-            />
-            <Form
-                initialData={getInitialPeopleData()}
-                columns={columns}
-                onAddData={handleAppPerson}
             />
         </div>
     );

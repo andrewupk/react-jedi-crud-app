@@ -1,31 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Table from "./components/common/Table";
-import Form from './components/common/Form'
-
-const data = []
+import { getPlanets } from './services/swApiService';
+import Button from './components/common/Button';
+import {Link} from 'react-router-dom';
 
 const columns = ['name', 'climate', 'terrain', 'diameter', 'population', 'created', 'id'];
 
 function Planets (){
-    const [planets, setPlanet] = useState(data);
-    console.log(planets);
+    const [planets, setPlanet] = useState([]);
 
-    const handleAppPlanet = (planetData) => {
-        const data = [...planets, planetData];
-        setPlanet(data)
-    }
-
-    const getInitialPlanetsData = () => {
-        return columns.reduce((cols, columnName) => {
-            cols[columnName] = "";
-            return cols;
-        }, {})
-    }
+    useEffect(() => {
+        const getData = async () => {
+            if (localStorage.planets === undefined){
+                const data = await getPlanets()
+                localStorage.setItem('planets', JSON.stringify(data))
+                setPlanet(data)
+            } else {
+                setPlanet(JSON.parse(localStorage.getItem('planets')))
+            }
+        }
+        getData()        
+    }, []);
 
     const deleteRow = (item) => {
         console.log('Deleting....', item);
-        const data = planets.filter(planet => planet !== item);
-        setPlanet(data);
+        const localplanets = JSON.parse(localStorage.planets);
+        const data = localplanets.filter(planet => planet.id !== item.id)
+        localStorage.setItem('planets', JSON.stringify(data))
+        setPlanet(data)
     }
 
     return (
@@ -33,16 +35,18 @@ function Planets (){
             <div className="page-header text-center">
                 <h1>Planets</h1>
             </div>
+            <Link to="/planets/new">
+                <Button
+                    label="New planet"
+                    classes="btn btn-info"
+                    disabled={false}
+                />
+            </Link>
             <Table
                 data={planets}
                 columns={columns}
                 tableDescriptor="Planets"
                 deleteHandler={deleteRow}
-            />
-            <Form
-                initialData={getInitialPlanetsData()}
-                columns={columns}
-                onAddData={handleAppPlanet}
             />
         </div>
     );
