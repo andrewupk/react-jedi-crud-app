@@ -22,12 +22,23 @@ function Planet ({history, match, location}) {
         history.goBack()        
     }
 
+    let errors = {name: true, diameter: true, population: true}
+    const validate = (planet) => {
+        errors.name = planet.name.length > 0;
+        errors.diameter = /^\d+$/gm.test(planet.diameter);
+        errors.population = /^\d+$/gm.test(planet.population);
+        const result = errors.name && /^\d+$/gm.test(planet.diameter) && errors.population;
+        return result;
+    }
+
     return (
         <div className="container">
             <Form 
                 columns = {Object.keys(planet[0])}
                 initialData = {planet[0]}
                 onAddData = {handleSaveChanges}
+                onValidate = {validate}
+                errors = {errors}
             />
         </div>
     );

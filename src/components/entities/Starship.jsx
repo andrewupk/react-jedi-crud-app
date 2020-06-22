@@ -22,12 +22,22 @@ function Starship ({history, match, location}) {
         history.goBack()        
     }
 
+    let errors = {name: true, MGLT: true}
+    const validate = (starship) => {
+        errors.name = starship.name.length > 0;
+        errors.MGLT = /^\d+$/gm.test(starship.MGLT);
+        const result = errors.name && errors.MGLT;
+        return result;
+    }
+
     return (
         <div className="container">
             <Form 
                 columns = {Object.keys(starship[0])}
                 initialData = {starship[0]}
                 onAddData = {handleSaveChanges}
+                onValidate = {validate}
+                errors = {errors}
             />
         </div>
     );

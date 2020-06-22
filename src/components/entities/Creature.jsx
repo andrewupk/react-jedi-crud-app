@@ -22,12 +22,24 @@ function Creature ({history, match, location}) {
         history.goBack()        
     }
 
+    let errors = {name: true, height: true, mass: true}
+    const validate = (creature) => {
+        //console.log(creature);
+        errors.name = creature.name.length > 0;
+        errors.height = /^\d+$/gm.test(creature.height);
+        errors.mass = /^\d+$/gm.test(creature.mass);
+        const result = errors.name && errors.height && errors.mass;
+        return result;
+    }
+
     return (
         <div className="container">
             <Form 
                 columns = {Object.keys(creature[0])}
                 initialData = {creature[0]}
                 onAddData = {handleSaveChanges}
+                onValidate = {validate}
+                errors = {errors}
             />
         </div>
     );
