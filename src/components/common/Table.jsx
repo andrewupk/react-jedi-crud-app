@@ -3,6 +3,7 @@ import Button from './Button';
 import { Link } from 'react-router-dom';
 
 function Table({columns, data, tableDescriptor, deleteHandler}) {
+    console.log(data);
     if (data.length){
         return (
             <table className="table table-dark">

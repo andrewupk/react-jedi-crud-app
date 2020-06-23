@@ -1,7 +1,12 @@
 import React from 'react';
 import Form from '../common/Form';
+import { useDispatch } from 'react-redux';
+import { createPerson } from '../../store/actions/people';
 
 function Creature ({history, match, location}) {
+
+    const dispatch = useDispatch();
+
     const id = match.params.creatureId
     const isNew = id === 'new'
     let creature;
@@ -16,8 +21,9 @@ function Creature ({history, match, location}) {
             const unchangedpeople = JSON.parse(localStorage.getItem('people')).filter(item => item.id !== creature.id);
             localStorage.setItem('people', JSON.stringify([...unchangedpeople, creature]))
         } else {
-            const people = JSON.parse(localStorage.getItem('people'))
-            localStorage.setItem('people', JSON.stringify([...people, creature]))
+            /*const people = JSON.parse(localStorage.getItem('people'))
+            localStorage.setItem('people', JSON.stringify([...people, creature]))*/
+            dispatch(createPerson(creature));
         }
         history.goBack()        
     }
