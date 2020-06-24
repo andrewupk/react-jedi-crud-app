@@ -12,21 +12,18 @@ function people (state = initialState, action) {
                 allPeople: action.people
             }; 
         case DELETE_PERSON:
+            const deleted_people = JSON.parse(localStorage.people).filter(person => person.id != action.id);
+            localStorage.setItem('people', JSON.stringify(deleted_people));
             return {
                 ...state, 
-                //allPeople: state.allPeople.filter(person => person.id !== action.id)
-                /*allPeople: localStorage.setItem('people', JSON.stringify(
-                    JSON.parse(window.localStorage.people).filter(person => person.id !== action.id)
-                ))*/
-                allPeople: state.allPeople.filter(person => person.id != action.id)
+                allPeople: deleted_people
             };
         case CREATE_PERSON:
+            const added_people = [...JSON.parse(localStorage.people), action.person];
+            localStorage.setItem('people', JSON.stringify(added_people));
             return {
                 ...state,
-                /*allPeople: localStorage.setItem('people', 
-                    JSON.stringify([...JSON.parse(localStorage.getItem('people')), action.person])
-                )*/
-                allPeople: [...state.allPeople, action.person]
+                allPeople: added_people
             };
         default:
             return state;

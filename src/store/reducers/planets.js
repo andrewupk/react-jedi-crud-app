@@ -12,21 +12,18 @@ function planets (state = initialState, action) {
                 allPlanets: action.planets
             }; 
         case DELETE_PLANET:
+            const deleted_planets = JSON.parse(localStorage.planets).filter(planet => planet.id != action.id);
+            localStorage.setItem('planets', JSON.stringify(deleted_planets));
             return {
                 ...state, 
-                //allPeople: state.allPeople.filter(person => person.id !== action.id)
-                /*allPlanets: localStorage.setItem('planets', JSON.stringify(
-                    JSON.parse(window.localStorage.planets).filter(planet => planet.id !== action.id)
-                ))*/
-                allPlanets: state.allPlanets.filter(planet => planet.id != action.id)
+                allPlanets: deleted_planets
             };
         case CREATE_PLANET:
+            const added_planets = [...JSON.parse(localStorage.planets), action.planet];
+            localStorage.setItem('planets', JSON.stringify(added_planets));
             return {
                 ...state,
-                /*allPlanets: localStorage.setItem('planets', 
-                    JSON.stringify([...JSON.parse(localStorage.getItem('planets')), action.planet])
-                )*/
-                allPlanets: [...state.allPlanets, action.planet]
+                allPlanets: added_planets
             };
         default:
             return state;

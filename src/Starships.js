@@ -10,21 +10,11 @@ import { getAllStarships } from './store/selectors/starships';
 const columns = ['name', 'model', 'starship_class', 'manufacturer', 'MGLT', 'hyperdrive_rating', 'id'];
 
 function Starships (){
-    //const [starships, setStarship] = useState([]);
     const dispatch = useDispatch();
     const starships = useSelector(state => getAllStarships(state));
 
     useEffect(() => {
         const getData = async () => {
-            /*if (localStorage.starships === undefined){
-                const data = await getStarships()
-                localStorage.setItem('starships', JSON.stringify(data))
-                //setStarship(data)
-                dispatch(setStarships(data));
-            } else {
-                //setStarship(JSON.parse(localStorage.getItem('starships')))
-                dispatch(setStarships(JSON.parse(localStorage.getItem('starships'))))
-            }*/
             const data = await getStarships();
             dispatch(setStarships(data));
         }
@@ -32,10 +22,6 @@ function Starships (){
     }, []);
 
     const deleteRow = (item) => {
-        /*console.log('Deleting....', item);
-        const localstarships = JSON.parse(localStorage.starships);
-        const data = localstarships.filter(starship => starship.id !== item.id)
-        localStorage.setItem('starships', JSON.stringify(data))*/
         dispatch(deleteStarship(item.id));
     }
 

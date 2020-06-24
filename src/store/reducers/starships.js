@@ -12,21 +12,18 @@ function starships (state = initialState, action) {
                 allStarships: action.starships
             }; 
         case DELETE_STARSHIP:
+            const deleted_starships = JSON.parse(localStorage.starships).filter(starship => starship.id != action.id);
+            localStorage.setItem('starships', JSON.stringify(deleted_starships));
             return {
                 ...state, 
-                //allPeople: state.allPeople.filter(person => person.id !== action.id)
-               /* allStarships: localStorage.setItem('starships', JSON.stringify(
-                    JSON.parse(window.localStorage.starships).filter(starship => starship.id !== action.id)
-                ))*/
-                allStarships: state.allStarships.filter(starship => starship.id != action.id)
+                allStarships: deleted_starships
             };
         case CREATE_STARSHIP:
+            const added_starships = [...JSON.parse(localStorage.starships), action.starship];
+            localStorage.setItem('starships', JSON.stringify(added_starships));
             return {
                 ...state,
-                /*allStarships: localStorage.setItem('starships', 
-                    JSON.stringify([...JSON.parse(localStorage.getItem('starships')), action.starship])
-                )*/
-                allStarships: [...state.allStarships, action.starship]
+                allStarships: added_starships
             };
         default:
             return state;

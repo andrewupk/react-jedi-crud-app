@@ -2,7 +2,6 @@ import React from 'react';
 import Form from '../common/Form';
 import { useDispatch } from 'react-redux';
 import { createStarship } from '../../store/actions/starships';
-import { createPlanet } from '../../store/actions/planets';
 
 function Starship ({history, match, location}) {
     const dispatch = useDispatch();
@@ -13,7 +12,6 @@ function Starship ({history, match, location}) {
     if (!isNew){
         starship = JSON.parse(localStorage.getItem('starships')).filter(item => item.id === id)
     } else {
-        //['name', 'model', 'starship_class', 'manufacturer', 'MGLT', 'hyperdrive_rating', 'id'];
         starship = [{name: '', model: '', starship_class: '', manufacturer: '', MGLT: '', hyperdrive_rating: '', id: ''}]
     }
     const handleSaveChanges = (starship) => {
@@ -21,9 +19,7 @@ function Starship ({history, match, location}) {
             const unchangedstarships = JSON.parse(localStorage.getItem('starships')).filter(item => item.id !== starship.id);
             localStorage.setItem('starships', JSON.stringify([...unchangedstarships, starship]))
         } else {
-            //const starships = JSON.parse(localStorage.getItem('starships'))
-            //localStorage.setItem('starships', JSON.stringify([...starships, starship]))
-            dispatch(createPlanet(starship))
+            dispatch(createStarship(starship))
         }
         history.goBack()        
     }

@@ -18,15 +18,6 @@ function People() {
 
     useEffect(() => {
         const getData = async () => {
-            /*if (localStorage.people === undefined){
-                const data = await getPeople()
-                localStorage.setItem('people', JSON.stringify(data))
-                //setPeople(data)
-                dispatch(setPeople(data));
-            } else {
-                //setPeople(JSON.parse(localStorage.getItem('people')))
-                dispatch(setPeople(JSON.parse(localStorage.getItem('people'))));
-            }*/
             const data = await getPeople();
             dispatch(setPeople(data));
         }
@@ -35,11 +26,6 @@ function People() {
     }, []);
 
     const deleteRow = (item) => {
-        /*console.log('Deleting....', item);
-        const localpeople = JSON.parse(localStorage.people);
-        const data = localpeople.filter(person => person.id !== item.id)
-        localStorage.setItem('people', JSON.stringify(data))*/
-        //setPeople(data)
         dispatch(deletePerson(item.id))
     }
 
