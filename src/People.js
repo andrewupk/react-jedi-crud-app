@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import Table from "./components/common/Table";
 import { getPeople } from './services/swApiService';
 import Button from './components/common/Button';
@@ -18,7 +18,7 @@ function People() {
 
     useEffect(() => {
         const getData = async () => {
-            if (localStorage.people === undefined){
+            /*if (localStorage.people === undefined){
                 const data = await getPeople()
                 localStorage.setItem('people', JSON.stringify(data))
                 //setPeople(data)
@@ -26,7 +26,9 @@ function People() {
             } else {
                 //setPeople(JSON.parse(localStorage.getItem('people')))
                 dispatch(setPeople(JSON.parse(localStorage.getItem('people'))));
-            }
+            }*/
+            const data = await getPeople();
+            dispatch(setPeople(data));
         }
         
         getData()        

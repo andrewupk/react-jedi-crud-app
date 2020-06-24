@@ -1,33 +1,42 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import Table from "./components/common/Table";
 import { getStarships } from './services/swApiService';
 import Button from './components/common/Button';
 import {Link} from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteStarship, setStarships } from './store/actions/starships';
+import { getAllStarships } from './store/selectors/starships';
 
 const columns = ['name', 'model', 'starship_class', 'manufacturer', 'MGLT', 'hyperdrive_rating', 'id'];
 
 function Starships (){
-    const [starships, setStarship] = useState([]);
+    //const [starships, setStarship] = useState([]);
+    const dispatch = useDispatch();
+    const starships = useSelector(state => getAllStarships(state));
 
     useEffect(() => {
         const getData = async () => {
-            if (localStorage.starships === undefined){
+            /*if (localStorage.starships === undefined){
                 const data = await getStarships()
                 localStorage.setItem('starships', JSON.stringify(data))
-                setStarship(data)
+                //setStarship(data)
+                dispatch(setStarships(data));
             } else {
-                setStarship(JSON.parse(localStorage.getItem('starships')))
-            }
+                //setStarship(JSON.parse(localStorage.getItem('starships')))
+                dispatch(setStarships(JSON.parse(localStorage.getItem('starships'))))
+            }*/
+            const data = await getStarships();
+            dispatch(setStarships(data));
         }
         getData()        
     }, []);
 
     const deleteRow = (item) => {
-        console.log('Deleting....', item);
+        /*console.log('Deleting....', item);
         const localstarships = JSON.parse(localStorage.starships);
         const data = localstarships.filter(starship => starship.id !== item.id)
-        localStorage.setItem('starships', JSON.stringify(data))
-        setStarship(data)
+        localStorage.setItem('starships', JSON.stringify(data))*/
+        dispatch(deleteStarship(item.id));
     }
 
     return (

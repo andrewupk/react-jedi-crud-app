@@ -1,7 +1,11 @@
 import React from 'react';
 import Form from '../common/Form';
+import { useDispatch } from 'react-redux';
+import { createPlanet } from '../../store/actions/planets';
 
 function Planet ({history, match, location}) {
+    const dispatch = useDispatch();
+
     const id = match.params.planetId
     const isNew = id === 'new'
     let planet;
@@ -16,8 +20,9 @@ function Planet ({history, match, location}) {
             const unchangedplanets = JSON.parse(localStorage.getItem('planets')).filter(item => item.id !== planet.id);
             localStorage.setItem('planets', JSON.stringify([...unchangedplanets, planet]))
         } else {
-            const planets = JSON.parse(localStorage.getItem('planets'))
-            localStorage.setItem('planets', JSON.stringify([...planets, planet]))
+            //const planets = JSON.parse(localStorage.getItem('planets'))
+            //localStorage.setItem('planets', JSON.stringify([...planets, planet]))
+            dispatch(createPlanet(planet));
         }
         history.goBack()        
     }
